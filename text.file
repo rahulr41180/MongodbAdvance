@@ -1,0 +1,57 @@
+
+show dbs
+use Web15
+db.createCollection("mock_movies")
+{
+    "_id":{"$oid":"622cb428a8f207656a3d760e"},
+    "id":1,
+    "movie_name":"Nothing's All Bad",
+    "movie_genre":"Drama",
+    "production_year":1994,
+    "budget":15326
+}
+db.mock_movies.find({}).pretty()
+
+1. find all movies which are equal to movie_name
+    db.mock_movies.find({movie_name : {$eq : "Nothing's All Bad"}}).pretty()
+
+2. find all movies which are not equal to movie_name
+    db.mock_movies.find({movie_name : {$not : {$eq : "Nothing's All Bad"}}}).pretty()
+
+
+    
+3. find all movies greater than and greater than equal to a budget
+    db.mock_movies.find({budget : {$gt : 10000}}).pretty()
+
+    db.mock_movies.find({budget : {$gte : 12000}}).pretty()
+
+4. find all movies less than and less than equal to a budget
+    db.mock_movies.find({budget : {$lt : 10000}}).pretty()
+
+    db.mock_movies.find({budget : {$lte : 15000}}).pretty()
+
+5. find all movies that are produced after 2000 with budget greater than 10000
+    db.mock_movies.find({$and : [{production_year : {$gt : 2000}},{budget : {$gt : 10000}}]}).pretty()
+
+6. find all movies that are produced after 2000 or budget greater than 10000
+    db.mock_movies.find({$or : [{production_year : {$gt : 2000}},{budget : {$gt : 10000}}]})
+
+7. find all movies that are neither produced after 2000 nor with budget greater than 10000.
+    db.mock_movies.find({$nor : [{production_year : {$gt : 2000}},{budget : {$gt : 10000}}]}).pretty()
+
+8. find all movies that are not produced in 2000 or they do not have budget of 10000
+    db.mock_movies.find({$or : [{production_year : {$not : {$eq : 2000}}},{budget : {$not : {$eq : 10000}}}]}).pretty()
+
+9. find all movies that were produced from 2000 to 2010.
+    db.mock_movies.find({production_year : {$in : [2000,2001,2002,2003,2004,2005,2006,2007,2008,2009,2010]}}).pretty()
+
+10. Sort all movies descending based on the production year and if the year is same then alphabetically for their movie_names
+    db.mock_movies.find({}).sort({production_year : 1, movie_name : 1}).pretty()
+
+
+
+11. in query 10 skip the first 10 entries and fetch the next 5
+    db.mock_movies.find({}).skip(10).limit(5).pretty()
+
+12. remove movie genre from the first 10 movies in query 10.
+    db.mock_movies.update({},{$unset : {movie_genre : }})
